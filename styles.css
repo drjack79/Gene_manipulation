@@ -1,0 +1,177 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 10px;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+h2 {
+    color: #224;
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+#game-container, #name-container, #result-container {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    margin: 10px auto;
+    box-sizing: border-box;
+}
+
+#word-display {
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    font-weight: bold;
+    margin: 15px 0;
+    min-height: 30px;
+    font-family: monospace;
+    word-break: break-word;
+}
+
+#letters {
+    margin: 15px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+}
+
+button {
+    padding: 8px 12px;
+    cursor: pointer;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+    min-width: 36px;
+}
+
+button:hover:not(:disabled) {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#hangman {
+    width: 250px;
+    height: 250px;
+    margin: 10px auto;
+}
+
+#hangman svg {
+    width: 100%;
+    height: 100%;
+}
+
+#question {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    min-height: 50px;
+    padding: 0 5px;
+}
+
+#message {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: red;
+    margin: 15px 0;
+    min-height: 25px;
+}
+
+.score-timer {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+#score, #timer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+#score {
+    color: green;
+}
+
+#next-button {
+    margin: 15px auto;
+    display: none;
+    padding: 8px 16px;
+}
+
+.letter-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    padding: 0;
+}
+
+.space-btn {
+    width: 80px;
+    background-color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Hangman parts visibility */
+#gallows {
+    visibility: visible;
+}
+
+#head,
+#body,
+#left-arm,
+#right-arm,
+#left-leg,
+#right-leg {
+    visibility: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 400px) {
+    #hangman {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .letter-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+    
+    #word-display {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+    }
+    
+    #question {
+        font-size: 1rem;
+    }
+}

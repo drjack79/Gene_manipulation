@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Molecular Biology</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Molecular Biology</h1>
+        <h2>Created by - Dr. M. K. Jaganathan</h2>
+        <div id="name-container">
+            <p>Enter your name:</p>
+            <input type="text" id="username" placeholder="Your Name">
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        <div id="game-container" style="display: none;">
+            <p id="question"></p>
+            <div id="hangman">
+                <svg viewBox="0 0 200 200" width="250" height="250">
+                    <path id="gallows" d="M20 180h160M50 180v-160M50 20h100M150 20v20" stroke="black" stroke-width="4" fill="none" />
+                    <circle id="head" cx="150" cy="60" r="20" stroke="black" stroke-width="4" fill="none" />
+                    <path id="body" d="M150 80v50" stroke="black" stroke-width="4" fill="none" />
+                    <path id="left-arm" d="M150 100l-30 20" stroke="black" stroke-width="4" fill="none" />
+                    <path id="right-arm" d="M150 100l30 20" stroke="black" stroke-width="4" fill="none" />
+                    <path id="left-leg" d="M150 130l-30 30" stroke="black" stroke-width="4" fill="none" />
+                    <path id="right-leg" d="M150 130l30 30" stroke="black" stroke-width="4" fill="none" />
+                </svg>
+            </div>
+            <p id="word-display"></p>
+            <div id="letters"></div>
+            <p id="message"></p>
+            <div class="score-timer">
+                <p id="score">Score: 0</p>
+                <p id="timer">Time Left: 60</p>
+            </div>
+            <button id="next-button" onclick="loadNextQuestion()" style="display: none;">Next Question</button>
+        </div>
+        <div id="result-container" style="display: none;">
+            <h2>Game Over</h2>
+            <p id="final-result"></p>
+            <button onclick="restartGame()">Play Again</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
