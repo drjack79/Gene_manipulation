@@ -2,61 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Molecular Biology</title>
-    <link rel="stylesheet" href="D:\jaganathan\official\2024-2025\EVEN\pharmappt\innovative_teaching\mobile\styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molecular Biology Hangman</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>Molecular Biology</h1>
-        <h2>Created by - Dr. M. K. Jaganathan</h2>
-        <div id="name-container">
-            <p>Enter your name:</p>
-            <input type="text" id="username" placeholder="Your Name">
-            <button onclick="startGame()">Start Game</button>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="game-container bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+        <h1 class="text-4xl font-bold text-blue-700 mb-6">Molecular Biology Hangman</h1>
+        <p class="text-lg text-gray-700 mb-6">Welcome, future molecular biologist! Let's test your knowledge.</p>
+        <div class="mb-6">
+            <label for="playerName" class="block text-gray-700 text-sm font-bold mb-2">Enter Your Name:</label>
+            <input type="text" id="playerName" placeholder="Your Name"
+                   class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
         </div>
-        <div id="game-container" style="display: none;">
-            <p id="question"></p>
-            <div id="hangman">
-                <svg viewBox="0 0 200 200" width="250" height="250">
-                    <!-- Gallows -->
-                    <path id="gallows" d="M20 180h160M50 180v-160M50 20h100M150 20v20" 
-                          stroke="black" stroke-width="4" fill="none" />
+        <button id="startGameButton"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out mb-4"
+                disabled>
+            Start Game
+        </button>
+        <button id="viewLeaderboardButtonWelcome"
+                class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out">
+            View Leaderboard
+        </button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="game-container bg-white p-8 rounded-xl shadow-lg max-w-3xl w-full hidden">
+        <div class="flex flex-col md:flex-row items-center justify-between w-full mb-6">
+            <div class="text-xl font-semibold text-gray-800 mb-4 md:mb-0">Player: <span id="displayPlayerName" class="text-blue-600"></span></div>
+            <div class="text-xl font-semibold text-gray-800">Score: <span id="scoreDisplay" class="text-green-600">0</span>/10</div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center md:items-start justify-center w-full gap-8">
+            <!-- Hangman Figure -->
+            <div class="hangman-figure flex items-center justify-center mb-6 md:mb-0">
+                <svg id="hangmanSvg" width="100%" height="100%" viewBox="0 0 150 200" class="text-gray-700">
+                    <!-- Gallow -->
+                    <line x1="10" y1="190" x2="10" y2="10" stroke="currentColor" stroke-width="4"/>
+                    <line x1="5" y1="190" x2="50" y2="190" stroke="currentColor" stroke-width="4"/>
+                    <line x1="10" y1="10" x2="100" y2="10" stroke="currentColor" stroke-width="4"/>
+                    <line x1="100" y1="10" x2="100" y2="30" stroke="currentColor" stroke-width="4"/>
                     <!-- Head -->
-                    <circle id="head" cx="150" cy="60" r="20" 
-                            stroke="black" stroke-width="4" fill="none" />
+                    <circle id="head" cx="100" cy="50" r="20" stroke="currentColor" stroke-width="4" fill="none" class="hidden"/>
                     <!-- Body -->
-                    <path id="body" d="M150 80v50" 
-                          stroke="black" stroke-width="4" fill="none" />
+                    <line id="body" x1="100" y1="70" x2="100" y2="120" stroke="currentColor" stroke-width="4" class="hidden"/>
                     <!-- Left Arm -->
-                    <path id="left-arm" d="M150 100l-30 20" 
-                          stroke="black" stroke-width="4" fill="none" />
+                    <line id="leftArm" x1="100" y1="80" x2="70" y2="110" stroke="currentColor" stroke-width="4" class="hidden"/>
                     <!-- Right Arm -->
-                    <path id="right-arm" d="M150 100l30 20" 
-                          stroke="black" stroke-width="4" fill="none" />
+                    <line id="rightArm" x1="100" y1="80" x2="130" y2="110" stroke="currentColor" stroke-width="4" class="hidden"/>
                     <!-- Left Leg -->
-                    <path id="left-leg" d="M150 130l-30 30" 
-                          stroke="black" stroke-width="4" fill="none" />
+                    <line id="leftLeg" x1="100" y1="120" x2="80" y2="160" stroke="currentColor" stroke-width="4" class="hidden"/>
                     <!-- Right Leg -->
-                    <path id="right-leg" d="M150 130l30 30" 
-                          stroke="black" stroke-width="4" fill="none" />
+                    <line id="rightLeg" x1="100" y1="120" x2="120" y2="160" stroke="currentColor" stroke-width="4" class="hidden"/>
                 </svg>
             </div>
-            <p id="word-display"></p>
-            <div id="letters"></div>
-            <p id="message"></p>
-            <div class="score-timer">
-                <p id="score">Score: 0</p>
-                <p id="timer">Time Left: 60</p>
+
+            <div class="flex-1 flex flex-col items-center">
+                <p id="questionDisplay" class="text-lg text-gray-700 mb-4 text-center"></p>
+                <div id="wordDisplay" class="text-5xl tracking-widest font-mono text-gray-900 mb-6 break-all"></div>
+                <div id="timerDisplay" class="text-2xl font-bold text-red-500 mb-6">Time: 60s</div>
+
+                <div class="mb-6 w-full max-w-sm">
+                    <label for="guessInput" class="block text-gray-700 text-sm font-bold mb-2">Guess a letter:</label>
+                    <input type="text" id="guessInput" maxlength="1"
+                           class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-3xl uppercase">
+                </div>
+                <div id="guessedLettersDisplay" class="text-gray-600 text-lg mb-6">Guessed Letters: <span class="font-mono"></span></div>
+                <p id="message" class="text-red-500 font-semibold mb-4"></p>
             </div>
-            <button id="next-button" onclick="loadNextQuestion()" style="display: none;">Next Question</button>
-        </div>
-        <div id="result-container" style="display: none;">
-            <h2>Game Over</h2>
-            <p id="final-result"></p>
-            <button onclick="restartGame()">Play Again</button>
         </div>
     </div>
-    <script src="D:\jaganathan\official\2024-2025\EVEN\pharmappt\innovative_teaching\mobile\script.js"></script>
+
+    <!-- Leaderboard Screen -->
+    <div id="leaderboard-screen" class="game-container bg-white p-8 rounded-xl shadow-lg max-w-xl w-full hidden">
+        <h2 class="text-3xl font-bold text-blue-700 mb-6">Leaderboard</h2>
+        <ul id="leaderboardList" class="w-full mb-6">
+            <!-- Scores will be loaded here by JavaScript -->
+        </ul>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <button id="downloadCsvButton"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-300 ease-in-out">
+                Download Scores (CSV)
+            </button>
+            <button id="backToWelcomeButton"
+                    class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition duration-300 ease-in-out">
+                Back to Welcome
+            </button>
+        </div>
+    </div>
+
+    <!-- Message Box for alerts/confirmations -->
+    <div id="messageBox" class="message-box">
+        <p id="messageBoxText" class="text-gray-800 text-lg mb-4"></p>
+        <button id="messageBoxButton">OK</button>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
