@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Molecular Biology</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="D:\jaganathan\official\2024-2025\EVEN\pharmappt\innovative_teaching\mobile\styles.css">
 </head>
 <body>
     <div class="container">
@@ -20,13 +19,27 @@
             <p id="question"></p>
             <div id="hangman">
                 <svg viewBox="0 0 200 200" width="250" height="250">
-                    <path id="gallows" d="M20 180h160M50 180v-160M50 20h100M150 20v20" stroke="black" stroke-width="4" fill="none" />
-                    <circle id="head" cx="150" cy="60" r="20" stroke="black" stroke-width="4" fill="none" />
-                    <path id="body" d="M150 80v50" stroke="black" stroke-width="4" fill="none" />
-                    <path id="left-arm" d="M150 100l-30 20" stroke="black" stroke-width="4" fill="none" />
-                    <path id="right-arm" d="M150 100l30 20" stroke="black" stroke-width="4" fill="none" />
-                    <path id="left-leg" d="M150 130l-30 30" stroke="black" stroke-width="4" fill="none" />
-                    <path id="right-leg" d="M150 130l30 30" stroke="black" stroke-width="4" fill="none" />
+                    <!-- Gallows -->
+                    <path id="gallows" d="M20 180h160M50 180v-160M50 20h100M150 20v20" 
+                          stroke="black" stroke-width="4" fill="none" />
+                    <!-- Head -->
+                    <circle id="head" cx="150" cy="60" r="20" 
+                            stroke="black" stroke-width="4" fill="none" />
+                    <!-- Body -->
+                    <path id="body" d="M150 80v50" 
+                          stroke="black" stroke-width="4" fill="none" />
+                    <!-- Left Arm -->
+                    <path id="left-arm" d="M150 100l-30 20" 
+                          stroke="black" stroke-width="4" fill="none" />
+                    <!-- Right Arm -->
+                    <path id="right-arm" d="M150 100l30 20" 
+                          stroke="black" stroke-width="4" fill="none" />
+                    <!-- Left Leg -->
+                    <path id="left-leg" d="M150 130l-30 30" 
+                          stroke="black" stroke-width="4" fill="none" />
+                    <!-- Right Leg -->
+                    <path id="right-leg" d="M150 130l30 30" 
+                          stroke="black" stroke-width="4" fill="none" />
                 </svg>
             </div>
             <p id="word-display"></p>
@@ -44,7 +57,6 @@
             <button onclick="restartGame()">Play Again</button>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="script.js"></script>
+    <script src="D:\jaganathan\official\2024-2025\EVEN\pharmappt\innovative_teaching\mobile\script.js"></script>
 </body>
 </html>

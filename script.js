@@ -103,36 +103,6 @@ function endGame() {
     document.getElementById("result-container").style.display = "block";
     document.getElementById("final-result").textContent = 
         `${username}, your final score is: ${score} out of ${words.length * 10}`;
-    exportScoreToExcel();
-}
-function exportScoreToExcel() {
-    const now = new Date();
-    const formattedTime = now.toLocaleString("en-IN", { hour12: true });
-    const timestamp = now.toISOString().slice(0, 19).replace(/[:T]/g, "-");
-
-    const newEntry = {
-        Name: username,
-        Score: score,
-        Date: formattedTime
-    };
-
-    let existingData = JSON.parse(localStorage.getItem("hangmanResults")) || [];
-    existingData.push(newEntry);
-    localStorage.setItem("hangmanResults", JSON.stringify(existingData));
-
-    const worksheet = XLSX.utils.json_to_sheet(existingData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Results");
-
-    const filename = `Hangman_Scores_${timestamp}.xlsx`;
-    XLSX.writeFile(workbook, filename);
-}
-
-    clearInterval(timerInterval);
-    document.getElementById("game-container").style.display = "none";
-    document.getElementById("result-container").style.display = "block";
-    document.getElementById("final-result").textContent = 
-        `${username}, your final score is: ${score} out of ${words.length * 10}`;
 }
 
 function initializeGame() {
