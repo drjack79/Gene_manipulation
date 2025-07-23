@@ -258,8 +258,8 @@ function handleGuess(event) {
         const guess = guessInput.value.trim().toUpperCase();
         guessInput.value = ''; // Clear input field immediately
 
-        if (!guess || guess.length !== 1 || !/[A-Z]/.test(guess)) {
-            messageDisplay.textContent = 'Please enter a single letter (A-Z).';
+        if (!guess || guess.length !== 1 || !/[A-Z0-9]/.test(guess)) {
+            messageDisplay.textContent = 'Please enter a single letter (A-Z) or number (0-9).';
             return;
         }
 
