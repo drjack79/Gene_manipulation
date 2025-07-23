@@ -1,3 +1,10 @@
+Of course. Here is the updated `script.js` file with the necessary changes to fix the CSV download functionality.
+
+The core issue was that the download was being initiated within a real-time listener (`onSnapshot`), which browsers often block to prevent unwanted downloads. The fix involves fetching the scores when the leaderboard is first opened and storing them. The download button then uses this stored data, ensuring the download is a direct result of a user's click.
+
+### Updated `script.js`
+
+```javascript
 // Firebase libraries are imported dynamically in initializeFirebase function
 // This setup handles cases where __firebase_config and __initial_auth_token
 // might not be defined (e.g., when running locally outside the Canvas environment).
@@ -44,6 +51,7 @@ let auth; // Auth instance
 let userId; // Current user ID
 let scoresCollectionRef; // Reference to the Firestore collection for scores
 let firebaseInitialized = false; // Flag to track Firebase initialization status
+let leaderboardScores = []; // Stores the scores for CSV download
 
 // DOM elements
 const welcomeScreen = document.getElementById('welcome-screen');
@@ -389,6 +397,7 @@ function fetchAndDisplayLeaderboard() {
         snapshot.forEach((doc) => {
             scores.push({ id: doc.id, ...doc.data() });
         });
+        leaderboardScores = scores; // Store scores for potential CSV download
         renderLeaderboard(scores);
     }, (error) => {
         console.error("Error fetching leaderboard:", error);
@@ -444,22 +453,16 @@ function downloadCsv(scores) {
 }
 
 downloadCsvButton.addEventListener('click', () => {
-    // Fetch current scores to ensure the CSV is up-to-date
-    if (!firebaseInitialized || !db || !scoresCollectionRef) {
+    // Use the already-fetched scores from the leaderboard
+    if (!firebaseInitialized) {
         showMessageBox("Database not initialized. Cannot download scores.");
         return;
     }
-    const q = query(scoresCollectionRef, orderBy("score", "desc"), orderBy("timestamp", "desc"));
-    onSnapshot(q, (snapshot) => {
-        const scores = [];
-        snapshot.forEach((doc) => {
-            scores.push({ id: doc.id, ...doc.data() });
-        });
-        downloadCsv(scores);
-    }, (error) => {
-        console.error("Error fetching scores for CSV:", error);
-        showMessageBox(`Error preparing CSV: ${error.message}`);
-    });
+    if (leaderboardScores.length === 0) {
+        showMessageBox("No scores to download.");
+        return;
+    }
+    downloadCsv(leaderboardScores);
 });
 
 
@@ -477,3 +480,4 @@ window.onload = async () => {
     await initializeFirebase();
     playerNameInput.focus();
 };
+```
