@@ -1,36 +1,82 @@
-Of course. Here is the updated `script.js` file with the necessary changes to fix the CSV download functionality.
-
-The core issue was that the download was being initiated within a real-time listener (`onSnapshot`), which browsers often block to prevent unwanted downloads. The fix involves fetching the scores when the leaderboard is first opened and storing them. The download button then uses this stored data, ensuring the download is a direct result of a user's click.
-
-### Updated `script.js`
-
-```javascript
 // Firebase libraries are imported dynamically in initializeFirebase function
 // This setup handles cases where __firebase_config and __initial_auth_token
 // might not be defined (e.g., when running locally outside the Canvas environment).
 
 // Data for the game: questions and their answers
 const gameData = [
-    { question: "The building blocks of DNA are __________.", answer: "NUCLEOTIDES" },
-    { question: "The sugar present in RNA is __________.", answer: "RIBOSE" },
-    { question: "__________ bonds link the nitrogenous bases of two DNA strands.", answer: "HYDROGEN" },
-    { question: "The enzyme responsible for DNA replication is __________.", answer: "DNA POLYMERASE" },
-    { question: "Transcription is the process of synthesizing __________ from a DNA template.", answer: "RNA" },
-    { question: "The three stop codons in the genetic code are __________, __________, and __________.", answer: "UAA UAG UGA" },
-    { question: "In eukaryotes, mRNA undergoes post-transcriptional modifications like __________, __________, and __________.", answer: "SPLICING 5' CAPPING POLYADENYLATION" },
-    { question: "The enzyme that synthesizes RNA during transcription is __________.", answer: "RNA POLYMERASE" },
-    { question: "The Central Dogma of molecular biology states: DNA → __________ → __________.", answer: "RNA PROTEIN" },
-    { question: "The region of DNA where RNA polymerase binds to initiate transcription is called the __________.", answer: "PROMOTER" },
-    { question: "Ribosomes are composed of __________ and __________.", answer: "RRNA PROTEINS" },
-    { question: "tRNA has a three-nucleotide sequence called __________ that pairs with the mRNA codon.", answer: "ANTICODON" },
-    { question: "DNA replication is __________, meaning each new DNA molecule has one old and one new strand.", answer: "SEMICONSERVATIVE" },
-    { question: "In prokaryotes, the cluster of genes regulated together is called an __________.", answer: "OPERON" },
-    { question: "The process of translating mRNA into protein takes place in the __________.", answer: "RIBOSOME" },
-    { question: "The enzyme __________ seals the gaps between Okazaki fragments on the lagging strand.", answer: "DNA LIGASE" },
-    { question: "A mutation that does not affect the amino acid sequence is called a __________ mutation.", answer: "SILENT" },
-    { question: "Histones are proteins around which __________ wraps in eukaryotic cells.", answer: "DNA" },
-    { question: "The short RNA primers in DNA replication are synthesized by the enzyme __________.", answer: "PRIMASE" },
-    { question: "The process by which genes are silenced through small RNAs is called __________.", answer: "RNA INTERFERENCE" }
+{ question: "During DNA isolation, cells are typically lysed using a _________ buffer.", answer: "lysis" },
+{ question: "To separate DNA from other cellular components, ____________________ is commonly used to precipitate DNA.", answer: "ethanol" },
+{ question: "During DNA isolation, ____________________ is used to degrade proteins, preventing their co-precipitation with DNA.", answer: "Protease K" },
+{ question: "The final step in many DNA isolation protocols involves resuspending the purified DNA in a low-salt buffer, such as ____________________.", answer: "TE buffer" },
+{ question: "For plant DNA isolation, a common initial step is mechanical disruption, often using a ____________________ and mortar with liquid nitrogen.", answer: "pestle" },
+{ question: "A key step in preparing a sample for DNA isolation is to homogenize the tissue or cells to ensure efficient ____________lysis____________.", answer: "lysis" },
+{ question: "The primary goal of DNA isolation is to obtain DNA that is both pure and ____________________.", answer: "intact" },
+{ question: "For quantifying DNA concentration after isolation, a spectrophotometer measures absorbance at ____________________ nm.", answer: "260" },
+{ question: "The purpose of adding RNase during genomic DNA isolation is to remove contaminating ____________________.", answer: "RNA" },
+{ question: "When isolating DNA from blood, ____________________ is typically used to lyse red blood cells while preserving white blood cells, which contain the DNA.", answer: "lysis buffer" },
+{ question: "In plasmid isolation, the alkaline lysis method uses ________________________ to denature chromosomal and plasmid DNA.", answer: "high pH" },
+{ question: "Following alkaline denaturation in plasmid isolation, ________________________ is added to neutralize the solution, causing chromosomal DNA and proteins to precipitate.", answer: "Potassium acetate" },
+{ question: "After neutralization and centrifugation in plasmid isolation, the plasmid DNA remains in the ____________________.", answer: "supernatant" },
+{ question: "Column-based plasmid isolation methods utilize a silica-based membrane to bind DNA in the presence of high ____________salt____________.", answer: "salt" },
+{ question: "To elute plasmid DNA from a silica column, a low-salt buffer or ____________________ is used.", answer: "water" },
+{ question: "During plasmid isolation, SDS (Sodium Dodecyl Sulfate) is a ____________________ that helps to disrupt bacterial cell membranes and denature proteins.", answer: "detergent" },
+{ question: "When isolating plasmid DNA, the initial bacterial pellet is typically resuspended in a buffer containing __________ to weaken the cell wall.", answer: "lysozyme" },
+{ question: "For large-scale plasmid isolation, a ________________________ culture volume is typically used.", answer: "large" },
+{ question: "During plasmid isolation, the addition of a high-salt, low-pH solution causes the precipitation of chromosomal DNA and proteins, which is then removed by _________________.", answer: "centrifugation" },
+{ question: "In plasmid isolation using the boiling method, brief heating denatures proteins and chromosomal DNA, while ______________ plasmid DNA remains intact.", answer: "supercoiled" },
+{ question: "21. During RNA isolation, the enzyme ________________ is critical for degrading contaminating DNA.", answer: "DNase" },
+{ question: "22. RNA is highly susceptible to degradation by ubiquitous enzymes called ________________________.", answer: "RNases" },
+{ question: "23. To inhibit RNase activity during RNA isolation, researchers often work in a ________________________-free environment.", answer: "RNase" },
+{ question: "24. A common chaotropic agent used in RNA isolation to denature proteins and inactivate RNases is ________________________ isothiocyanate.", answer: "Guanidinium" },
+{ question: "25. After phenol-chloroform extraction in RNA isolation, RNA partitions into the ________________________ phase.", answer: "aqueous" },
+{ question: "26. In RNA isolation using phenol-chloroform, ________________________ is often added to the phenol mixture to stabilize the interface and ensure cleaner separation of phases.", answer: "isoamyl alcohol" },
+{ question: "27. The quality and quantity of isolated RNA can be assessed using a spectrophotometer by measuring absorbance at 260 nm and 280 nm, yielding the A260/A280 ratio to indicate ________________________ contamination.", answer: "protein" },
+{ question: "28. When isolating RNA, extreme care must be taken to avoid contamination from ________________________, which are found on skin and dust.", answer: "RNases" },
+{ question: "29. During RNA isolation, an A260/A230 ratio below 1.8 typically indicates contamination by ________________________, such as guanidinium salts or phenol.", answer: "organic compounds" },
+{ question: "30. In RNA isolation, a common method to separate RNA from DNA and proteins involves using a density gradient, such as ____________________ chloride.", answer: "cesium" },
+{ question: "31. After RNA isolation, it is common to assess the RNA integrity using gel electrophoresis to check for intact ribosomal RNA ________________________.", answer: "bands" },
+{ question: "32. To minimize degradation during DNA and RNA isolation, all reagents and equipment should be kept ________________________.", answer: "cold" },
+{ question: "33. RNA is typically stored in a freezer at ________________________ with RNase inhibitors to prevent degradation.", answer: "-80°C" },
+{ question: "34. For RNA isolation from animal tissues, a common initial step is mechanical disruption using a ________________________ or bead beating.", answer: "sonicator" },
+{ question: "________________________ is the process by which foreign DNA is introduced into a bacterial cell.", answer: "Transformation" },
+{ question: "36. Bacterial cells are made ________________________ to DNA by treatments such as heat shock or electroporation.", answer: "competent" },
+{ question: "37. For heat shock transformation, bacterial cells are incubated with DNA on ice, followed by a brief exposure to ________________________, and then returned to ice.", answer: "high temperature" },
+{ question: "38. In electroporation, a short ________________________ pulse is applied to create temporary pores in the bacterial cell membrane.", answer: "electric" },
+{ question: "39. After transformation, bacteria are typically grown on selective media containing an ________________________ resistance gene encoded by the plasmid.", answer: "antibiotic" },
+{ question: "40. To increase the efficiency of transformation, bacterial cells are often treated with calcium chloride ($CaCl_2$) to make their membranes more permeable to DNA, a process known as chemical ________________________.", answer: "permeabilization" },
+{ question: "41. Competent cells prepared for transformation are typically stored at ________________________ for long-term preservation.", answer: "-80°C" },
+{ question: "42. After transformation, bacteria are typically allowed a recovery period in ________________________ media before plating on selective media.", answer: "rich" },
+{ question: "43. In chemical transformation, the bacterial cells are incubated with DNA in the presence of ________________________ ions, typically from $CaCl_2$.", answer: "calcium" },
+{ question: "44. After chemical transformation, a brief heat shock step at ________________________ increases the permeability of the bacterial cell membrane.", answer: "42°C" },
+{ question: "45. The process of introducing foreign DNA into eukaryotic cells is generally referred to as ________________________.", answer: "transfection" },
+{ question: "46. The efficiency of transformation can be quantified by calculating the number of transformants per ________________________ of DNA.", answer: "microgram" },
+{ question: "The choice of bacterial strain for transformation depends on factors such as its ________________________ efficiency and compatibility with the plasmid.", answer: "transformation" },
+{ question: "________________________ enzymes recognize and cut DNA at specific nucleotide sequences.", answer: "Restriction" },
+{ question: "The specific DNA sequences recognized by restriction enzymes are often ________________________, meaning they read the same forwards and backwards on opposite strands.", answer: "palindromic" },
+{ question: "Restriction enzymes can produce two types of ends: blunt ends or ________________________ ends.", answer: "sticky" },
+{ question: "When sticky ends are generated, they can spontaneously anneal with complementary sticky ends from other DNA fragments through ________________________ bonding.", answer: "hydrogen" },
+{ question: "To visualize restriction enzyme digestion products, DNA fragments are typically separated by size using ________________________ electrophoresis.", answer: "agarose gel" },
+{ question: "Ligation requires an energy source, typically ________________________, to form the phosphodiester bond.", answer: "ATP" },
+{ question: "For successful ligation, the DNA fragments must have compatible ________________________.", answer: "ends" },
+{ question: "The optimal temperature for most ligase enzymes, particularly T4 DNA ligase, is around ________________________.", answer: "16°C" },
+{ question: "When performing ligation, a molar ratio of ________________________ for insert to vector is often desired to promote efficient insertion.", answer: "3:1" },
+{ question: "Restriction enzymes are endonucleases, meaning they cut DNA ________________________ the polynucleotide chain.", answer: "within" },
+{ question: "After restriction digestion, the DNA fragments can be purified using a ________________________ kit to remove enzymes and buffers.", answer: "DNA clean-up" },
+{ question: "For maximum yield in ligation, the reaction is often performed overnight at a lower temperature to allow for more stable ________________________ of sticky ends.", answer: "annealing" },
+{ question: "A restriction enzyme that recognizes $GAATTC$ and cuts between G and A on both strands produces ________________________ ends.", answer: "sticky" },
+{ question: "The optimal ratio of insert to vector DNA in a ligation reaction is crucial to minimize the formation of ________________________ plasmid.", answer: "self-ligated" },
+{ question: "The fragment of DNA to be inserted into a vector during cloning is often referred to as the ________________________.", answer: "insert" },
+{ question: "A common method for detecting DNA on an agarose gel is staining with ________________________ bromide, which intercalates into DNA and fluoresces under UV light.", answer: "ethidium" },
+{ question: "Restriction enzyme reactions are typically performed at an optimal temperature, usually ________________________, which mimics bacterial physiological conditions.", answer: "37°C" },
+{ question: "In DNA ligation, the enzyme forms a phosphodiester bond between the 3'-hydroxyl group of one nucleotide and the 5'-________________________ group of another.", answer: "phosphate" },
+{ question: "When separating DNA fragments by agarose gel electrophoresis, larger fragments migrate more ________________________ through the gel matrix.", answer: "slowly" },
+{ question: "A restriction map is a diagram that shows the positions of ________________________ sites on a DNA molecule.", answer: "restriction" },
+{ question: "When setting up a ligation reaction, it is crucial to use an appropriate ________________________, which provides the necessary ions and optimal pH for the enzyme.", answer: "buffer" },
+{ question: "Some restriction enzymes generate blunt ends, meaning they cut both DNA strands directly ________________________ each other.", answer: "opposite" },
+{ question: "For effective ligation, the concentration of DNA fragments in the reaction should be optimized to promote intermolecular ligation over ________________________.", answer: "intramolecular ligation" },
+{ question: "The process of using gel electrophoresis to isolate a specific DNA fragment from a mixture is called gel ________________________.", answer: "extraction" },
+{ question: "After ligation, the mixture is typically used to transform bacterial cells, which then serve as hosts for DNA ________________________.", answer: "replication" },
+{ question: "When using restriction enzymes, a common problem is ________________________ digestion, where the enzyme fails to cut at all recognition sites.", answer: "partial" }
 ];
 
 // Game state variables
@@ -51,7 +97,6 @@ let auth; // Auth instance
 let userId; // Current user ID
 let scoresCollectionRef; // Reference to the Firestore collection for scores
 let firebaseInitialized = false; // Flag to track Firebase initialization status
-let leaderboardScores = []; // Stores the scores for CSV download
 
 // DOM elements
 const welcomeScreen = document.getElementById('welcome-screen');
@@ -84,7 +129,6 @@ function showMessageBox(message, callback = null) {
     messageBox.style.display = 'block';
     messageBoxButton.onclick = () => {
         messageBox.style.display = 'none';
-        guessInput.focus();
         if (callback) {
             callback();
         }
@@ -95,15 +139,7 @@ function showMessageBox(message, callback = null) {
 async function initializeFirebase() {
     try {
         // Use global variables if defined, otherwise provide empty defaults for local testing
-         const firebaseConfig = {
-    apiKey: "AIzaSyBRD3CDd6jH_xIYExErNioHDN1oP1Q_j4A",
-    authDomain: "hangman-1920.firebaseapp.com",
-    projectId: "hangman-1920",
-    storageBucket: "hangman-1920.firebasestorage.app",
-    messagingSenderId: "62296248655",
-    appId: "1:62296248655:web:9c8c1631063b16df01753a",
-    measurementId: "G-B6G0XDMTSX"
-  };
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
@@ -266,8 +302,8 @@ function handleGuess(event) {
         const guess = guessInput.value.trim().toUpperCase();
         guessInput.value = ''; // Clear input field immediately
 
-        if (!guess || guess.length !== 1 || !/[A-Z0-9]/.test(guess)) {
-            messageDisplay.textContent = 'Please enter a single letter (A-Z) or number (0-9).';
+        if (!guess || guess.length !== 1 || !/[A-Z]/.test(guess)) {
+            messageDisplay.textContent = 'Please enter a single letter (A-Z).';
             return;
         }
 
@@ -397,7 +433,6 @@ function fetchAndDisplayLeaderboard() {
         snapshot.forEach((doc) => {
             scores.push({ id: doc.id, ...doc.data() });
         });
-        leaderboardScores = scores; // Store scores for potential CSV download
         renderLeaderboard(scores);
     }, (error) => {
         console.error("Error fetching leaderboard:", error);
@@ -453,16 +488,22 @@ function downloadCsv(scores) {
 }
 
 downloadCsvButton.addEventListener('click', () => {
-    // Use the already-fetched scores from the leaderboard
-    if (!firebaseInitialized) {
+    // Fetch current scores to ensure the CSV is up-to-date
+    if (!firebaseInitialized || !db || !scoresCollectionRef) {
         showMessageBox("Database not initialized. Cannot download scores.");
         return;
     }
-    if (leaderboardScores.length === 0) {
-        showMessageBox("No scores to download.");
-        return;
-    }
-    downloadCsv(leaderboardScores);
+    const q = query(scoresCollectionRef, orderBy("score", "desc"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (snapshot) => {
+        const scores = [];
+        snapshot.forEach((doc) => {
+            scores.push({ id: doc.id, ...doc.data() });
+        });
+        downloadCsv(scores);
+    }, (error) => {
+        console.error("Error fetching scores for CSV:", error);
+        showMessageBox(`Error preparing CSV: ${error.message}`);
+    });
 });
 
 
@@ -480,4 +521,3 @@ window.onload = async () => {
     await initializeFirebase();
     playerNameInput.focus();
 };
-```
